@@ -16,7 +16,7 @@
  * DELETE /api/teachers.php?id=XXX       → delete
  */
 
-require_once '../config.php';
+require_once __DIR__ . '/../config.php';
 
 $conn   = getConnection();
 $method = $_SERVER['REQUEST_METHOD'];
