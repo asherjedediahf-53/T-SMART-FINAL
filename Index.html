@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>T-SMART</title>
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&family=Roboto:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+<style>
+  .btn-active { background: #eff6ff !important; border-color: #2563eb !important; color: #2563eb !important; font-weight: 600; }
+  .btn-active svg { stroke: #2563eb; }
+</style>
+</head>
+<body>
+  <script>
+    if (sessionStorage.getItem('tt_auth') !== 'true') window.location.href = 'login.html';
+    // Restore theme
+    const savedTheme = localStorage.getItem('arkibo-theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  </script>
+
+  <!-- ─── TOPBAR ─── -->
+  <header class="topbar">
+    <!-- Hamburger -->
+    <button class="hamburger-btn" onclick="toggleSidebar()" title="Menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <line x1="3" y1="12" x2="21" y2="12"/>
+        <line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </button>
+
+    <!-- Brand -->
+    <a class="topbar-brand" href="#">
+      <div class="brand-icon">🗂️</div>
+      <span class="brand-name">T-<span>SMART</span></span>
+    </a>
+
+
+    <!-- Right icons -->
+    <div class="topbar-right">
+      <!-- Settings -->
+      <div style="position:relative">
+        <button class="icon-btn" onclick="toggleSettings(event)" title="Settings" id="settingsBtn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </button>
+
+        <!-- Settings dropdown — dark/light only -->
+        <div class="settings-dropdown hidden" id="settingsDropdown">
+          <div class="settings-section" style="border-bottom:none">
+            <div class="settings-label">Appearance</div>
+            <div class="theme-toggle-row">
+              <span class="theme-toggle-label">Dark mode</span>
+              <label class="toggle-switch">
+                <input type="checkbox" id="themeToggle" onchange="toggleTheme(this)">
+                <span class="toggle-track"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ─── APP BODY ─── -->
+  <div class="app-body">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <nav class="sidebar-nav">
+        <div class="nav-item active">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10 9 9 9 8 9"/>
+          </svg>
+          Training Records
+        </div>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <div class="user-avatar" id="sidebarAvatar">A1</div>
+          <div class="user-info">
+            <div class="user-name" id="sidebarUsername">admin1</div>
+            <div class="user-role">Admin</div>
+          </div>
+          <button class="logout-btn" onclick="handleLogout()" title="Sign out">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+              <polyline points="16 17 21 12 16 7"/>
+              <line x1="21" y1="12" x2="9" y2="12"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+      <div class="content">
+        <div class="table-header">
+          <div class="table-search">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <input type="text" id="searchInput" placeholder="Search records..." autocomplete="off">
+          </div>
+          <div class="table-header-right">
+            <button class="btn" id="sortBtn" onclick="toggleSort(event)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="3" y1="6" x2="21" y2="6"/><line x1="6" y1="12" x2="18" y2="12"/><line x1="9" y1="18" x2="15" y2="18"/>
+              </svg>
+              Sort
+            </button>
+            <button class="btn" id="filterBtn" onclick="toggleFilter(event)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+              </svg>
+              Filter
+            </button>
+            <button class="btn primary" onclick="openAddModal()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+              Add Record
+            </button>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Last Name</th><th>First Name</th><th>Middle Name</th><th>Suffix</th>
+                  <th>Birthdate</th><th>Sex</th><th>Civil Status</th><th>Education</th>
+                  <th>Division</th><th>Functional Division</th><th>Designation</th>
+                  <th>Years of Service</th><th>L&D Needs</th><th>Title of Training</th>
+                  <th>Date of Training</th><th>No. of Hours</th><th>Sponsor</th><th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody"></tbody>
+            </table>
+          </div>
+          <div class="pagination-bar">
+            <div class="page-controls" id="pageControls"></div>
+            <div class="entries-select">
+              <span>Showing <span id="entryInfo"></span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ─── SORT PANEL ─── -->
+  <div id="sortOverlay" class="panel-overlay hidden" onclick="closePanels()"></div>
+  <div id="sortPanel" class="sort-panel hidden">
+    <div class="panel-title">Sort by</div>
+    <div class="panel-section">
+      <div class="panel-section-label">Last Name</div>
+      <label class="radio-row"><input type="radio" name="sortName" value="az" checked><span style="margin-left:6px">A–Z</span></label>
+      <label class="radio-row"><input type="radio" name="sortName" value="za"><span style="margin-left:6px">Z–A</span></label>
+    </div>
+    <div class="panel-section">
+      <div class="panel-section-label">Date of Training</div>
+      <label class="radio-row"><input type="radio" name="sortDate" value="asc"><span style="margin-left:6px">Ascending</span></label>
+      <label class="radio-row"><input type="radio" name="sortDate" value="desc"><span style="margin-left:6px">Descending</span></label>
+    </div>
+    <div class="panel-footer">
+      <button class="btn" id="sortResetBtn">Reset</button>
+      <button class="btn primary" id="sortApplyBtn">Apply</button>
+    </div>
+  </div>
+
+  <!-- ─── FILTER PANEL ─── -->
+  <div id="filterOverlay" class="panel-overlay hidden" onclick="closePanels()"></div>
+  <div id="filterPanel" class="filter-panel hidden">
+    <div class="panel-title">Filter</div>
+    <div class="filter-section">
+      <div class="filter-section-header"><span class="filter-section-title">Date of Training</span><span class="reset-link" data-reset-section="date" style="cursor:pointer">Reset</span></div>
+      <div class="date-row">
+        <div class="date-field"><label>From:</label><input type="date" id="filterDateFrom" class="filter-input"></div>
+        <div class="date-field"><label>To:</label><input type="date" id="filterDateTo" class="filter-input"></div>
+      </div>
+    </div>
+    <div class="filter-section">
+      <div class="filter-section-header"><span class="filter-section-title">Division</span><span class="reset-link" data-reset-section="division" style="cursor:pointer">Reset</span></div>
+      <select id="filterDivision" class="filter-select">
+        <option value="">All divisions</option>
+        <option>Davao City</option><option>Digos City</option><option>Panabo City</option><option>Tagum City</option>
+        <option>Davao del Sur</option><option>Davao del Norte</option><option>Davao Oriental</option>
+        <option>Davao Occidental</option><option>Mati City</option><option>IGACOS</option>
+        <option>Davao de Oro</option><option>Regional Office XI</option>
+      </select>
+    </div>
+    <div class="filter-section">
+      <div class="filter-section-header"><span class="filter-section-title">Functional Division</span><span class="reset-link" data-reset-section="funcdiv" style="cursor:pointer">Reset</span></div>
+      <select id="filterFuncDiv" class="filter-select">
+        <option value="">All</option>
+        <option>Teaching Personnel</option><option>Non-Teaching Personnel</option>
+      </select>
+    </div>
+    <div class="filter-section">
+      <div class="filter-section-header"><span class="filter-section-title">Keyword</span><span class="reset-link" data-reset-section="keyword" style="cursor:pointer">Reset</span></div>
+      <div class="filter-search-wrap">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input id="filterKeyword" class="filter-search" type="text" placeholder="Search name, training...">
+      </div>
+    </div>
+    <div class="panel-footer">
+      <button class="btn" id="filterResetBtn">Reset all</button>
+      <button class="btn primary" id="filterApplyBtn">Apply</button>
+    </div>
+  </div>
+
+  <!-- ─── EDIT MODAL ─── -->
+  <div id="editModalOverlay" class="modal-overlay hidden" onclick="closeEditModal()"></div>
+  <div id="editModal" class="modal hidden">
+    <div class="modal-header">
+      <div class="modal-title-row">
+        <div class="modal-icon">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+          </svg>
+        </div>
+        <h2 class="modal-title" id="editModalTitle">Edit Record</h2>
+      </div>
+      <button class="modal-close" onclick="closeEditModal()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+    <input type="hidden" id="editIdx">
+    <input type="hidden" id="editIdNumber">
+    <div class="modal-body">
+      <div class="modal-section-title">Personal Information</div>
+      <div class="modal-grid">
+        <div class="modal-field"><label class="modal-label">Last Name</label><input class="modal-input" id="editLastName" type="text" placeholder="Last name"></div>
+        <div class="modal-field"><label class="modal-label">First Name</label><input class="modal-input" id="editFirstName" type="text" placeholder="First name"></div>
+        <div class="modal-field"><label class="modal-label">Middle Name</label><input class="modal-input" id="editMiddleName" type="text" placeholder="Middle name"></div>
+        <div class="modal-field"><label class="modal-label">Suffix</label><input class="modal-input" id="editSuffix" type="text" placeholder="Jr., Sr., II"></div>
+        <div class="modal-field modal-field-full">
+          <label class="modal-label">Birthdate</label>
+          <div class="date-parts">
+            <input class="modal-input int-only" id="editBdYear" type="text" inputmode="numeric" placeholder="Year (e.g. 1985)" maxlength="4">
+            <select class="modal-input modal-select" id="editBdMonth"><option value="">Month</option><option value="1">January</option>
+<option value="2">February</option>
+<option value="3">March</option>
+<option value="4">April</option>
+<option value="5">May</option>
+<option value="6">June</option>
+<option value="7">July</option>
+<option value="8">August</option>
+<option value="9">September</option>
+<option value="10">October</option>
+<option value="11">November</option>
+<option value="12">December</option></select>
+            <input class="modal-input int-only" id="editBdDay" type="text" inputmode="numeric" placeholder="Day (1–31)" maxlength="2">
+          </div>
+        </div>
+        <div class="modal-field"><label class="modal-label">Sex</label><select class="modal-input modal-select" id="editSex"><option value="">Select</option><option>Male</option><option>Female</option></select></div>
+        <div class="modal-field"><label class="modal-label">Civil Status</label><select class="modal-input modal-select" id="editCivilStatus"><option value="">Select</option><option>Single</option><option>Married</option><option>Annulled</option><option>Widow/Widower</option></select></div>
+        <div class="modal-field modal-field-full"><label class="modal-label">Highest Educational Attainment</label><select class="modal-input modal-select" id="editEducation"><option value="">Select</option><option>Bachelor's Degree</option><option>Master's Degree</option><option>Doctorate Degree</option></select></div>
+      </div>
+      <div class="modal-section-title">Employment Details</div>
+      <div class="modal-grid">
+        <div class="modal-field"><label class="modal-label">Division</label><select class="modal-input modal-select" id="editDivision"><option value="">Select</option><option>Davao City</option><option>Digos City</option><option>Panabo City</option><option>Tagum City</option><option>Davao del Sur</option><option>Davao del Norte</option><option>Davao Oriental</option><option>Davao Occidental</option><option>Mati City</option><option>IGACOS</option><option>Davao de Oro</option><option>Regional Office XI</option></select></div>
+        <div class="modal-field"><label class="modal-label">Functional Division</label><select class="modal-input modal-select" id="editFunctionalDiv"><option value="">Select</option><option>Teaching Personnel</option><option>Non-Teaching Personnel</option></select></div>
+        <div class="modal-field"><label class="modal-label">Designation</label><input class="modal-input" id="editDesignation" type="text" placeholder="e.g. Administration Office"></div>
+        <div class="modal-field"><label class="modal-label">Years of Service</label><input class="modal-input int-only" id="editYears" type="text" inputmode="numeric" placeholder="e.g. 5" maxlength="3"></div>
+      </div>
+      <div class="modal-section-title">Training Information</div>
+      <div class="modal-grid">
+        <div class="modal-field modal-field-full"><label class="modal-label">Learning and Development Needs</label><input class="modal-input" id="editLdNeeds" type="text" placeholder="Enter L&D needs"></div>
+        <div class="modal-field modal-field-full"><label class="modal-label">Title of Training</label><input class="modal-input" id="editTraining" type="text" placeholder="Enter training title"></div>
+        <div class="modal-field modal-field-full">
+          <label class="modal-label">Date of Training</label>
+          <div class="date-parts">
+            <input class="modal-input int-only" id="editTrainYear" type="text" inputmode="numeric" placeholder="Year (e.g. 2024)" maxlength="4">
+            <select class="modal-input modal-select" id="editTrainMonth"><option value="">Month</option><option value="1">January</option>
+<option value="2">February</option>
+<option value="3">March</option>
+<option value="4">April</option>
+<option value="5">May</option>
+<option value="6">June</option>
+<option value="7">July</option>
+<option value="8">August</option>
+<option value="9">September</option>
+<option value="10">October</option>
+<option value="11">November</option>
+<option value="12">December</option></select>
+            <input class="modal-input int-only" id="editTrainDay" type="text" inputmode="numeric" placeholder="Day (1–31)" maxlength="2">
+          </div>
+        </div>
+        <div class="modal-field"><label class="modal-label">No. of Hours</label><input class="modal-input int-only" id="editHours" type="text" inputmode="numeric" placeholder="e.g. 8" maxlength="4"></div>
+        <div class="modal-field"><label class="modal-label">Sponsor</label><input class="modal-input" id="editSponsor" type="text" placeholder="Enter sponsor"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeEditModal()">Cancel</button>
+      <button class="btn primary" onclick="saveEdit()">Save Changes</button>
+    </div>
+  </div>
+
+  <!-- ─── ADD MODAL ─── -->
+  <div id="addModalOverlay" class="modal-overlay hidden" onclick="closeAddModal()"></div>
+  <div id="addModal" class="modal hidden">
+    <div class="modal-header">
+      <div class="modal-title-row">
+        <div class="modal-icon">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+        </div>
+        <h2 class="modal-title">Add New Record</h2>
+      </div>
+      <button class="modal-close" onclick="closeAddModal()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-section-title">Personal Information</div>
+      <div class="modal-grid">
+        <div class="modal-field"><label class="modal-label">Last Name</label><input class="modal-input" id="addLastName" type="text" placeholder="Last name"></div>
+        <div class="modal-field"><label class="modal-label">First Name</label><input class="modal-input" id="addFirstName" type="text" placeholder="First name"></div>
+        <div class="modal-field"><label class="modal-label">Middle Name</label><input class="modal-input" id="addMiddleName" type="text" placeholder="Middle name"></div>
+        <div class="modal-field"><label class="modal-label">Suffix</label><input class="modal-input" id="addSuffix" type="text" placeholder="Jr., Sr., II"></div>
+        <div class="modal-field modal-field-full">
+          <label class="modal-label">Birthdate</label>
+          <div class="date-parts">
+            <input class="modal-input int-only" id="addBdYear" type="text" inputmode="numeric" placeholder="Year (e.g. 1985)" maxlength="4">
+            <select class="modal-input modal-select" id="addBdMonth"><option value="">Month</option><option value="1">January</option>
+<option value="2">February</option>
+<option value="3">March</option>
+<option value="4">April</option>
+<option value="5">May</option>
+<option value="6">June</option>
+<option value="7">July</option>
+<option value="8">August</option>
+<option value="9">September</option>
+<option value="10">October</option>
+<option value="11">November</option>
+<option value="12">December</option></select>
+            <input class="modal-input int-only" id="addBdDay" type="text" inputmode="numeric" placeholder="Day (1–31)" maxlength="2">
+          </div>
+        </div>
+        <div class="modal-field"><label class="modal-label">Sex</label><select class="modal-input modal-select" id="addSex"><option value="">Select</option><option>Male</option><option>Female</option></select></div>
+        <div class="modal-field"><label class="modal-label">Civil Status</label><select class="modal-input modal-select" id="addCivilStatus"><option value="">Select</option><option>Single</option><option>Married</option><option>Annulled</option><option>Widow/Widower</option></select></div>
+        <div class="modal-field modal-field-full"><label class="modal-label">Highest Educational Attainment</label><select class="modal-input modal-select" id="addEducation"><option value="">Select</option><option>Bachelor's Degree</option><option>Master's Degree</option><option>Doctorate Degree</option></select></div>
+      </div>
+      <div class="modal-section-title">Employment Details</div>
+      <div class="modal-grid">
+        <div class="modal-field"><label class="modal-label">Division</label><select class="modal-input modal-select" id="addDivision"><option value="">Select</option><option>Davao City</option><option>Digos City</option><option>Panabo City</option><option>Tagum City</option><option>Davao del Sur</option><option>Davao del Norte</option><option>Davao Oriental</option><option>Davao Occidental</option><option>Mati City</option><option>IGACOS</option><option>Davao de Oro</option><option>Regional Office XI</option></select></div>
+        <div class="modal-field"><label class="modal-label">Functional Division</label><select class="modal-input modal-select" id="addFunctionalDiv"><option value="">Select</option><option>Teaching Personnel</option><option>Non-Teaching Personnel</option></select></div>
+        <div class="modal-field"><label class="modal-label">Designation</label><input class="modal-input" id="addDesignation" type="text" placeholder="e.g. Administration Office"></div>
+        <div class="modal-field"><label class="modal-label">Years of Service</label><input class="modal-input int-only" id="addYears" type="text" inputmode="numeric" placeholder="e.g. 5" maxlength="3"></div>
+      </div>
+      <div class="modal-section-title">Training Information</div>
+      <div class="modal-grid">
+        <div class="modal-field modal-field-full"><label class="modal-label">Learning and Development Needs</label><input class="modal-input" id="addLdNeeds" type="text" placeholder="Enter L&D needs"></div>
+        <div class="modal-field modal-field-full"><label class="modal-label">Title of Training</label><input class="modal-input" id="addTraining" type="text" placeholder="Enter training title"></div>
+        <div class="modal-field modal-field-full">
+          <label class="modal-label">Date of Training</label>
+          <div class="date-parts">
+            <input class="modal-input int-only" id="addTrainYear" type="text" inputmode="numeric" placeholder="Year (e.g. 2024)" maxlength="4">
+            <select class="modal-input modal-select" id="addTrainMonth"><option value="">Month</option><option value="1">January</option>
+<option value="2">February</option>
+<option value="3">March</option>
+<option value="4">April</option>
+<option value="5">May</option>
+<option value="6">June</option>
+<option value="7">July</option>
+<option value="8">August</option>
+<option value="9">September</option>
+<option value="10">October</option>
+<option value="11">November</option>
+<option value="12">December</option></select>
+            <input class="modal-input int-only" id="addTrainDay" type="text" inputmode="numeric" placeholder="Day (1–31)" maxlength="2">
+          </div>
+        </div>
+        <div class="modal-field"><label class="modal-label">No. of Hours</label><input class="modal-input int-only" id="addHours" type="text" inputmode="numeric" placeholder="e.g. 8" maxlength="4"></div>
+        <div class="modal-field"><label class="modal-label">Sponsor</label><input class="modal-input" id="addSponsor" type="text" placeholder="Enter sponsor"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeAddModal()">Cancel</button>
+      <button class="btn primary" onclick="saveAdd()">Add Record</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    // ─── Session ─────────────────────────────────────────────────────────────
+    const storedUser = sessionStorage.getItem('tt_user') || 'admin1';
+    document.getElementById('sidebarAvatar').textContent = storedUser.slice(0, 2).toUpperCase();
+    document.getElementById('sidebarUsername').textContent = storedUser;
+
+    // ─── Theme ───────────────────────────────────────────────────────────────
+    const currentTheme = localStorage.getItem('arkibo-theme') || 'light';
+    document.documentElement.setAttribute('data-theme', currentTheme);
+    if (currentTheme === 'dark') document.getElementById('themeToggle').checked = true;
+
+    function toggleTheme(checkbox) {
+      const theme = checkbox.checked ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('arkibo-theme', theme);
+    }
+
+    // ─── Sidebar ─────────────────────────────────────────────────────────────
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('collapsed');
+    }
+
+    // ─── Settings dropdown ───────────────────────────────────────────────────
+    function toggleSettings(e) {
+      e.stopPropagation();
+      document.getElementById('settingsDropdown').classList.toggle('hidden');
+      closePanels();
+      closeAllDropdowns();
+    }
+
+    document.addEventListener('click', () => {
+      document.getElementById('settingsDropdown').classList.add('hidden');
+    });
+
+    document.getElementById('settingsDropdown').addEventListener('click', e => e.stopPropagation());
+
+    // ─── Logout ──────────────────────────────────────────────────────────────
+    function handleLogout() {
+      sessionStorage.removeItem('tt_auth');
+      sessionStorage.removeItem('tt_user');
+      window.location.href = 'login.html';
+    }
+  </script>
+</body>
+</html>
